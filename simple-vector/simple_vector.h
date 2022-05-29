@@ -33,7 +33,7 @@ public:
         items_(size),
         size_(size),
         capacity_(size) {
-        std::fill(begin(), end(), 0);
+        std::generate(begin(), end(), [](){return Type();});
     }
  
     // Создаёт вектор из size элементов, инициализированных значением value
@@ -42,9 +42,10 @@ public:
         size_(size),
         capacity_(size) {
         std::fill(begin(), end(), value);
+        
     }
  
-    // Создаёт вектор из std::initializer_list 
+    // Создаёт вектор из std::initializer_list
     SimpleVector(std::initializer_list<Type> init)
     : items_(init.size()),
         size_(init.size()),
@@ -80,7 +81,7 @@ public:
         return *this;
     }
     
-    SimpleVector& operator=(const SimpleVector&& rhs) 
+    SimpleVector& operator=(const SimpleVector&& rhs)
     {
         items_ = std::move(rhs.items_);
         size_ = rhs.size_;
@@ -120,6 +121,7 @@ public:
  
     // Возвращает ссылку на элемент с индексом index
     Type& operator[](size_t index) noexcept {
+        assert(index <= GetSize());
         return items_[index];
     }
  
@@ -153,7 +155,7 @@ public:
  
     // Изменяет размер массива.
     // При увеличении размера новые элементы получают значение по умолчанию для типа Type
-    void Resize(size_t new_size) 
+    void Resize(size_t new_size)
     {
         try
         {
