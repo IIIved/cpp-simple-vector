@@ -222,22 +222,13 @@ public:
         return items_.Get() + size_;
     }
  
-   void PushBack(const Type& item) {
-        const size_t new_size = size_ + 1;
-        if (new_size > capacity_) {
-            const size_t new_capacity = std::max(capacity_ * 2, new_size);
-
-            auto new_items = ReallocateCopy(new_capacity);  // может бросить исключение
-            new_items.Get()[size_] = item;                  // может бросить исключение
-
-            capacity_ = new_capacity;
-            items_.swap(new_items);
-        } else {
-            items_.Get()[size_] = item;
+   void PushBack(const Type& value) {
+        if (capacity_ == size_) {
+            ResizeCapacity(size_ == 0 ? 1 : size_ * 2);
         }
-        size_ = new_size;
+        items_[size_++] = value;
     }
-    
+
     void PushBack(Type&& value) {
         if (capacity_ == size_) {
             ResizeCapacity(size_ == 0 ? 1 : size_ * 2);
