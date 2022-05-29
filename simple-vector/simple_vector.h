@@ -45,7 +45,7 @@ public:
         
     }
  
-    // Создаёт вектор из std::initializer_list
+    // Создаёт вектор из std::initializer_list 
     SimpleVector(std::initializer_list<Type> init)
     : items_(init.size()),
         size_(init.size()),
@@ -81,7 +81,7 @@ public:
         return *this;
     }
     
-    SimpleVector& operator=(const SimpleVector&& rhs)
+    SimpleVector& operator=(const SimpleVector&& rhs) 
     {
         items_ = std::move(rhs.items_);
         size_ = rhs.size_;
@@ -127,6 +127,7 @@ public:
  
     // Возвращает константную ссылку на элемент с индексом index
     const Type& operator[](size_t index) const noexcept {
+        assert(index <= GetSize());
         return items_[index];
     }
  
@@ -155,7 +156,7 @@ public:
  
     // Изменяет размер массива.
     // При увеличении размера новые элементы получают значение по умолчанию для типа Type
-    void Resize(size_t new_size)
+    void Resize(size_t new_size) 
     {
         try
         {
@@ -313,13 +314,13 @@ public:
  
     // "Удаляет" последний элемент вектора. Вектор не должен быть пустым
     void PopBack() noexcept {
-        if (size_ > 0) {
+        assert(!IsEmpty());
             --size_;
-        }
     }
  
     // Удаляет элемент вектора в указанной позиции
     Iterator Erase(ConstIterator pos) {
+        assert(pos >= begin() && pos < end());
         auto distance = pos - cbegin();
         Iterator pos_ = items_.Get() + distance;
         std::move(pos_ + 1, end(), pos_);
